@@ -6,6 +6,10 @@ const Layout = () => {
   return (
     <Stack>
         <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+        <Stack.Screen name='Signup' options={{
+            headerTitle: 'Signup',
+            headerTitleAlign: 'center'
+        }} />
         <Stack.Screen name='index' options={{
             headerTitle: 'Login',
             headerTitleAlign: 'center'

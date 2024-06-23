@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import {
   Button,
@@ -10,7 +10,6 @@ import { Redirect, router } from "expo-router";
 const Login = () => {
   const [user, setUser] = useState(0);
 
-  const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [pass, setPass] = useState(null);
 
@@ -21,13 +20,6 @@ const Login = () => {
   ) : (
     <View style={styles.body}>
       <View style={styles.container}>
-        <TextInput
-          mode="outlined"
-          value={name}
-          onChangeText={setName}
-          placeholder="Name"
-          keyboardType="email-address"
-        />
         <TextInput
           mode="outlined"
           value={email}
@@ -55,13 +47,16 @@ const Login = () => {
           mode="contained"
           icon="account"
           onLongPress={() => {
-            setName(``);
             setEmail(``);
             setPass(``);
           }}
         >
           <Text style={styles.buttonText}>Login</Text>
         </Button>
+        <View style={styles.signUpView}>
+          <Text>Don't have an account? </Text>
+          <Text style={styles.signUpText} onPress={() => router.push(`/Signup`)}>Sign up here</Text>
+        </View>
       </View>
     </View>
   );
@@ -79,7 +74,7 @@ const styles = StyleSheet.create({
   container: {
     // backgroundColor: 'blue',
     width: "100%",
-    height: 300,
+    height: 250,
     justifyContent: "space-around",
   },
   loginButton: {
@@ -89,6 +84,14 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
   },
+  signUpView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    // backgroundColor: 'red'
+  },
+  signUpText: {
+    color: 'blue'
+  }
 });
 
 export default Login;
