@@ -1,14 +1,16 @@
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Text,
   TextInput,
 } from "react-native-paper";
 import { Redirect, router } from "expo-router";
+import { userContextData } from "../context/UserContext";
 
 const Login = () => {
-  const [user, setUser] = useState(0);
+  // const [user, setUser] = useState(0);
+  const { user, Login } = useContext(userContextData);
 
   const [email, setEmail] = useState(null);
   const [pass, setPass] = useState(null);
@@ -46,6 +48,9 @@ const Login = () => {
           style={styles.loginButton}
           mode="contained"
           icon="account"
+          onPress={() => {
+            Login(email, pass);
+          }}
           onLongPress={() => {
             setEmail(``);
             setPass(``);

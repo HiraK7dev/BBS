@@ -1,10 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { Stack } from 'expo-router'
+import UserContext from '../context/UserContext'
 
 const Layout = () => {
   return (
-    <Stack>
+    <UserContext>
+    <Stack initialRouteName='index'>
         <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
         <Stack.Screen name='Signup' options={{
             headerTitle: 'Signup',
@@ -15,6 +17,7 @@ const Layout = () => {
             headerTitleAlign: 'center'
         }} />
     </Stack>
+    </UserContext>
   )
 }
 

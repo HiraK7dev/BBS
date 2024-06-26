@@ -1,17 +1,20 @@
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Text,
   TextInput,
 } from "react-native-paper";
 import { Redirect, router } from "expo-router";
+import { userContextData } from "../context/UserContext";
 
 const SignUp = () => {
 
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [pass, setPass] = useState(null);
+
+    const { createAccount } = useContext(userContextData);
   
     const [checked, setChecked] = useState(true);
     
@@ -51,6 +54,9 @@ const SignUp = () => {
           style={styles.loginButton}
           mode="contained"
           icon="account-alert"
+          onPress={() => {
+            createAccount(email, pass, name);
+          }}
           onLongPress={() => {
             setName(``);
             setEmail(``);
@@ -61,7 +67,7 @@ const SignUp = () => {
         </Button>
         <View style={styles.signUpView}>
           <Text>Have have an account? </Text>
-          <Text style={styles.signUpText} onPress={() => router.push(`/`)}>Login here</Text>
+          <Text style={styles.signUpText} onPress={() => router.replace(`/`)}>Login here</Text>
         </View>
       </View>
     </View>
