@@ -34,16 +34,18 @@ function UserContext({ children }) {
                 password, // password
                 name // name (optional)
             );
-            const session = await account.createEmailPasswordSession(
-                email, // email
-                password // password
-            );
-            setUser(session);
+            // Login(email, password);
+            (async () => {
+                const session = await account.createEmailPasswordSession(
+                    email, // email
+                    password // password
+                );
+                setUser(session);
+            })();
             console.log(`Account Created Succcessuly`);
         } catch (error) {
             console.log(`Account creation failed: ` + error);
         }
-        setisLoading(0);
     }
     //Login
     async function Login(email, password) {
