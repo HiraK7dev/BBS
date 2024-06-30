@@ -17,6 +17,29 @@ const SignUp = () => {
     const { createAccount } = useContext(userContextData);
   
     const [checked, setChecked] = useState(true);
+
+    const [isValid, setIsValid] = useState(true);
+    const [isValidPass, setIsValidPass] = useState(true);
+
+    const validateEmail = (email) => {
+      // Simple regex for email validation
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    };
+  
+    const handleEmailChange = (text) => {
+      setEmail(text);
+      setIsValid(validateEmail(text));
+    };
+  
+    const handlePassChange = (text) => {
+      setPass(text);
+      if(text.length < 8){
+        setIsValidPass(false);
+      } else {
+        setIsValidPass(true);
+      }
+    };
     
   return (
     <View style={styles.body}>
@@ -31,9 +54,11 @@ const SignUp = () => {
         <TextInput
           mode="outlined"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={handleEmailChange}
           placeholder="Email"
           keyboardType="email-address"
+          error={!isValid}
+          label={!isValid ? `Please enter a valid email` : ``}
         />
         <TextInput
           mode="outlined"
@@ -46,16 +71,20 @@ const SignUp = () => {
             />
           }
           value={pass}
-          onChangeText={setPass}
+          onChangeText={handlePassChange}
           placeholder="Password"
           secureTextEntry={checked}
+          error={!isValidPass}
+          label={!isValidPass ? `Must be at least 8 characters` : ``}
         />
         <Button
           style={styles.loginButton}
           mode="contained"
           icon="account-alert"
           onPress={() => {
-            createAccount(email, pass, name);
+            if(isValid && isValidPass && email != null && pass != null){
+              createAccount(email, pass, name);
+            }
           }}
           onLongPress={() => {
             setName(``);

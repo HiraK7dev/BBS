@@ -1,8 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { account } from '../appwrite/config';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { ID } from 'react-native-appwrite';
-import { ActivityIndicator } from 'react-native-paper';
+import { ActivityIndicator, Icon } from 'react-native-paper';
 
 export const userContextData = createContext();
 
@@ -11,6 +11,10 @@ function UserContext({ children }) {
     const [user, setUser] = useState(null);
 
     const [isLoading, setisLoading] = useState(0);
+    const [error, setError] = useState({
+        value: 0,
+        errorType: null
+    });
 
     //Get the currently logged in user
     async function getUserStatus() {
@@ -44,8 +48,13 @@ function UserContext({ children }) {
             })();
             console.log(`Account Created Succcessuly`);
         } catch (error) {
+            setError({
+                value: 1,
+                errorType: `signup`
+            })
             console.log(`Account creation failed: ` + error);
         }
+        setisLoading(0);
     }
     //Login
     async function Login(email, password) {
@@ -58,6 +67,10 @@ function UserContext({ children }) {
             setUser(session);
             console.log(`Login Successful`);
         } catch (error) {
+            setError({
+                value: 1,
+                errorType: `login`
+            })
             console.log(`error`);
         }
         setisLoading(0);
@@ -65,17 +78,22 @@ function UserContext({ children }) {
 
     useEffect(() => { 
         getUserStatus();
-        console.log(`Hello`);
     }, [])
+
+    if(error.value){
+        return(
+            <View style={styles.layout}>
+                <Icon source='alert-circle-outline' size={78} color='red' />
+                <Text style={styles.errorText}>{error.errorType == `login` ? `Login failed` : `Account creation failed`}</Text>
+                <Text style={styles.errorMsg}>{error.errorType == `login` ? `Try again with another email or password.` : `Something went wrong`}</Text>
+                <Text style={styles.refreshText} onPress={() => setError({ value: 0, errorType: null})}>Try again</Text>
+            </View>
+        )
+    }
 
     if(isLoading){
         return(
-            <View style={{
-                height: '100%',
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center'
-            }}>
+            <View style={styles.layout}>
                 <ActivityIndicator animating={true} size={'large'}/>
             </View>
         )
@@ -89,5 +107,26 @@ function UserContext({ children }) {
     </userContextData.Provider>
   )
 }
+
+const styles = StyleSheet.create({
+    layout: {
+        height: '100%',
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    errorText: {
+        fontSize: 21,
+        fontWeight: '700',
+        color: 'red',
+        padding: 10
+    },
+    errorMsg: {
+        paddingBottom: 6
+    },
+    refreshText: {
+        color: 'blue'
+    }
+});
 
 export default UserContext

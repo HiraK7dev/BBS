@@ -17,6 +17,29 @@ const Login = () => {
 
   const [checked, setChecked] = useState(true);
 
+  const [isValid, setIsValid] = useState(true);
+  const [isValidPass, setIsValidPass] = useState(true);
+
+  const validateEmail = (email) => {
+    // Simple regex for email validation
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const handleEmailChange = (text) => {
+    setEmail(text);
+    setIsValid(validateEmail(text));
+  };
+
+  const handlePassChange = (text) => {
+    setPass(text);
+    if(text.length < 8){
+      setIsValidPass(false);
+    } else {
+      setIsValidPass(true);
+    }
+  };
+
   return user ? (
     <Redirect href="(tabs)/home" />
   ) : (
@@ -25,9 +48,11 @@ const Login = () => {
         <TextInput
           mode="outlined"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={handleEmailChange}
           placeholder="Email"
           keyboardType="email-address"
+          error={!isValid}
+          label={!isValid ? `Please enter a valid email` : ``}
         />
         <TextInput
           mode="outlined"
@@ -40,16 +65,20 @@ const Login = () => {
             />
           }
           value={pass}
-          onChangeText={setPass}
+          onChangeText={handlePassChange}
           placeholder="Password"
           secureTextEntry={checked}
+          error={!isValidPass}
+          label={!isValidPass ? `Must be at least 8 characters` : ``}
         />
         <Button
           style={styles.loginButton}
           mode="contained"
           icon="account"
           onPress={() => {
-            Login(email, pass);
+            if(isValid && isValidPass && email != null && pass != null){
+              Login(email, pass);
+            }
           }}
           onLongPress={() => {
             setEmail(``);
