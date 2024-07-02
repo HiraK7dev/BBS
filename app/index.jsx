@@ -9,7 +9,7 @@ import { Redirect, router } from "expo-router";
 import { userContextData } from "../context/UserContext";
 
 const Login = () => {
-  // const [user, setUser] = useState(0);
+
   const { user, Login } = useContext(userContextData);
 
   const [email, setEmail] = useState(null);

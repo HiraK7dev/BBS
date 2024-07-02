@@ -1,11 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import { Icon } from 'react-native-paper'
+import { Icon, useTheme } from 'react-native-paper'
 import { Tabs } from 'expo-router'
 
 const TabLayout = () => {
+  const theme = useTheme();
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+    <Tabs screenOptions={{ tabBarActiveTintColor: theme.colors.primary }}>
       <Tabs.Screen
         name="home/index"
         options={{
