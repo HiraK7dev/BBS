@@ -22,7 +22,7 @@ function UserContext({ children }) {
             setisLoading(1);
             const result = await account.get();
             setUser(result);
-            console.log(`Account Found`);
+            console.log(`Account found`);
         } catch (error) {
             console.log(`Account not found!`);
         }
@@ -38,14 +38,7 @@ function UserContext({ children }) {
                 password, // password
                 name // name (optional)
             );
-            // Login(email, password);
-            (async () => {
-                const session = await account.createEmailPasswordSession(
-                    email, // email
-                    password // password
-                );
-                setUser(session);
-            })();
+            Login(email, password);
             console.log(`Account Created Succcessuly`);
         } catch (error) {
             setError({
@@ -53,8 +46,8 @@ function UserContext({ children }) {
                 errorType: `signup`
             })
             console.log(`Account creation failed: ` + error);
+            setisLoading(0);
         }
-        setisLoading(0);
     }
     //Login
     async function Login(email, password) {
@@ -64,14 +57,28 @@ function UserContext({ children }) {
                 email, // email
                 password // password
             );
-            setUser(session);
+            getUserStatus();
             console.log(`Login Successful`);
         } catch (error) {
             setError({
                 value: 1,
                 errorType: `login`
             })
-            console.log(`error`);
+            console.log(error);
+            setisLoading(0);
+        }
+    }
+
+    async function Logout(){
+        try {
+            setisLoading(1);
+            const result = await account.deleteSession(
+                'current' // sessionId
+            );
+            setUser(null);
+            console.log(result);
+        } catch (error) {
+            console.log(error);
         }
         setisLoading(0);
     }
@@ -100,7 +107,7 @@ function UserContext({ children }) {
     }
 
   return (
-    <userContextData.Provider value={{user, setUser, createAccount, Login}}>
+    <userContextData.Provider value={{user, setUser, createAccount, Login, Logout}}>
         {
             children
         }
