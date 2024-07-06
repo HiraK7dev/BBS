@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { list } from "../../../appwrite/database";
 import {
   ActivityIndicator,
@@ -8,11 +8,13 @@ import {
   IconButton,
 } from "react-native-paper";
 import Search from "../../../components/Search";
+import { datacontext } from "../../../context/DataContext"; 
+import { router } from "expo-router";
 
 //Home Page
 
 const Home = () => {
-  const [data, setData] = useState();
+  const {data, setData} = useContext(datacontext);
   const [isLoading, setisLoading] = useState(0);
 
   async function fetchingData() {
@@ -40,8 +42,8 @@ const Home = () => {
       <Search />
       <FlatList
         data={data?.documents}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => {console.log(`Hello!`)}}>
+        renderItem={({ item, index }) => (
+          <TouchableOpacity onPress={() => router.push(`/home/${index}`)}>
             <Card.Title
               title={item.name}
               titleStyle={styles.titleText}

@@ -13,7 +13,7 @@ export async function list(){
         );
         return promise; 
     } catch (error) {
-        return `error`;
+        return error;
     }
 }
 

@@ -8,9 +8,9 @@ const TabLayout = () => {
   return (
     <Tabs screenOptions={{ tabBarActiveTintColor: theme.colors.primary }}>
       <Tabs.Screen
-        name="home/index"
+        name="home"
         options={{
-          title: 'Home',
+          headerShown: false,
           tabBarIcon: ({ color }) => <Icon source='home' size={28} color={color} />,
         }}
       />
