@@ -22,6 +22,7 @@ function UserContext({ children }) {
             setisLoading(1);
             const result = await account.get();
             setUser(result);
+            // console.log(result.labels[0]); //account label
             console.log(`Account found`);
         } catch (error) {
             console.log(`Account not found!`);
