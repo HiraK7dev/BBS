@@ -15,9 +15,9 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="more/index"
+        name="more"
         options={{
-          title: 'More',
+          headerShown: false,
           tabBarIcon: ({ color }) => <Icon source='cards' size={28} color={color} />,
         }}
       />

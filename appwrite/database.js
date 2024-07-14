@@ -28,5 +28,31 @@ export async function create(name, location, yearPaid){
         "yearPaid": `${yearPaid}`,
         }
     );
-    setTimeout(()=>{ window.location.href = '/'; }, 2000);
+}
+
+export async function update(documentId, data){
+    try {
+        const result = await database.updateDocument(
+            `${VITE_DATABASE_ID}`,
+            `${VITE_COLLECTION_ID}`,
+            `${documentId}`, // documentId
+            data,
+        );
+        return result;
+    } catch (error) {
+        return `error`;
+    }
+}
+
+export async function deleteDocument(documentId){
+    try {
+        const result = await database.deleteDocument(
+            `${VITE_DATABASE_ID}`,
+            `${VITE_COLLECTION_ID}`,
+            `${documentId}`
+        );
+        return result;
+    } catch (error) {
+        return `error`;
+    }
 }

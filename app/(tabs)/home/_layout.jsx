@@ -1,7 +1,7 @@
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack } from 'expo-router';
 
 export default function Layout() {
-  const userId = useLocalSearchParams();
+
   return (
     <Stack initialRouteName='index'>
         <Stack.Screen name='[user]'/>

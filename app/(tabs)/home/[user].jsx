@@ -1,11 +1,14 @@
 import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Button, DataTable, Icon, IconButton } from "react-native-paper";
 import { datacontext } from "../../../context/DataContext";
 import CustomHeader from "../../../components/CustomHeader";
 import { userContextData } from "../../../context/UserContext";
 import { ID } from "react-native-appwrite";
+import { deleteDocument, update } from "../../../appwrite/database";
+import client from "../../../appwrite/config";
+import { VITE_COLLECTION_ID, VITE_DATABASE_ID } from '@env';
 
 const User = () => {
   const userId = useLocalSearchParams();
@@ -13,16 +16,16 @@ const User = () => {
   const { user } = useContext(userContextData);
 
   const { data } = useContext(datacontext);
-  const { name, location, yearPaid } = data?.documents[userId.user];
+  const { name, location, yearPaid, $id } = data?.documents[userId.user];
 
-  // let tempYearPaid = JSON.parse(yearPaid);
-  const [tempYearPaid, setTempYearPaid] = useState(JSON.parse(yearPaid));
+  let tempYearPaid = JSON.parse(yearPaid);
+  // const [tempYearPaid, setTempYearPaid] = useState(JSON.parse(yearPaid));
 
   //adminView
-  const [year, setYear] = useState(null);
-  const [amount, setAmount] = useState(null);
+  const [year, setYear] = useState(``);
+  const [amount, setAmount] = useState(``);
 
-  const [total, setTotal] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   let tempObj = null;
 
@@ -33,6 +36,33 @@ const User = () => {
       p: amount
     }
   }, [year, amount])
+
+  async function deleteData(){
+    const res = await deleteDocument($id);
+    if(res == `error`){
+      alert(`Something went wrong!`);
+    } else {
+      router.replace(`/home`);
+    }
+  }
+
+  async function updateData(){
+    if(year.length > 3 && amount.length > 0){
+      setLoading(true);
+      setYear(``);
+      setAmount(``);
+      const data = {
+        "yearPaid": `${JSON.stringify(tempYearPaid)}`,
+      }
+      const res = await update($id, data);
+      if(res == `error`){
+        alert(`Something went wrong!`);
+      }
+      setLoading(false);
+    } else {
+      alert(`Invalid Input!`);
+    }
+  }
 
   return (
     <View>
@@ -106,17 +136,16 @@ const User = () => {
               />
             </View>
             <Button
-              icon="update"
+              // icon="update"
               mode="contained"
+              loading={loading}
               style={styles.updateContributionButton}
               onPress={() => {
-                setTempYearPaid([
-                  ...tempYearPaid,
-                  tempObj
-                ]);
+                tempYearPaid.push(tempObj);
+                updateData();
               }}
             >
-              Update Contribution
+            { loading ? `Loading` : `Update Contribution`}
             </Button>
             <View style={styles.adminButtons}>
               <Button
@@ -133,27 +162,9 @@ const User = () => {
                 containerColor="#E43F6F"
                 mode="contained"
                 size={20}
-                onPress={() => console.log("Pressed")}
+                onPress={deleteData}
               />
             </View>
-            {/* Total */}
-            {/* <View style={styles.adminInput}>
-              <TextInput
-                style={styles.inputStyle}
-                placeholder="Year"
-                keyboardType="number-pad"
-                onChangeText={setTotal}
-                value={total}
-              />
-              <Button
-                icon="pencil"
-                mode="contained"
-                // style={styles.editDetailsButton}
-                onPress={() => console.log("Pressed")}
-              >
-                Edit Details
-              </Button>
-            </View> */}
           </View>
           </>
         ) : null}
