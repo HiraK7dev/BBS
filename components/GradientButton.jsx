@@ -8,7 +8,7 @@ const GradientButton = ({ color, text, fun }) => {
         colors={color}
         style={styles.button}
       >
-        <TouchableOpacity onPress={fun}>
+        <TouchableOpacity onPress={fun} style={styles.touchable}>
           <Text style={styles.buttonText}>{text}</Text>
         </TouchableOpacity>
       </LinearGradient>
@@ -20,9 +20,13 @@ const styles = StyleSheet.create({
         height: 100,
         width: '48%',
         borderRadius: 15,
+        marginBottom: 12
+      },
+      touchable: {
+        width: '100%',
+        height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 12
       },
       buttonText: {
         color: 'white',

@@ -7,8 +7,7 @@ import CustomHeader from "../../../components/CustomHeader";
 import { userContextData } from "../../../context/UserContext";
 import { ID } from "react-native-appwrite";
 import { deleteDocument, update } from "../../../appwrite/database";
-import client from "../../../appwrite/config";
-import { VITE_COLLECTION_ID, VITE_DATABASE_ID } from '@env';
+import Toast from "react-native-toast-message";
 
 const User = () => {
   const userId = useLocalSearchParams();
@@ -16,10 +15,18 @@ const User = () => {
   const { user } = useContext(userContextData);
 
   const { data } = useContext(datacontext);
-  const { name, location, yearPaid, $id } = data?.documents[userId.user];
+  const { name, location, yearPaid, familyDetails, $id } =
+    data?.documents[userId.user];
 
-  let tempYearPaid = JSON.parse(yearPaid);
-  // const [tempYearPaid, setTempYearPaid] = useState(JSON.parse(yearPaid));
+  let tempYearPaid = [];
+  let tempFamilyDetails = {};
+
+  if (yearPaid != ``) {
+    tempYearPaid = JSON.parse(yearPaid);
+  }
+  if (familyDetails != ``) {
+    tempFamilyDetails = JSON.parse(familyDetails);
+  }
 
   //adminView
   const [year, setYear] = useState(``);
@@ -33,34 +40,45 @@ const User = () => {
     tempObj = {
       id: ID.unique(),
       y: year,
-      p: amount
-    }
-  }, [year, amount])
+      p: amount,
+    };
+  }, [year, amount]);
 
-  async function deleteData(){
+  async function deleteData() {
     const res = await deleteDocument($id);
-    if(res == `error`){
-      alert(`Something went wrong!`);
+    if (res == `error`) {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong!",
+        text2: "Try again later",
+      });
     } else {
-      router.replace(`/home`);
+      router.back();
     }
   }
 
-  async function updateData(){
-    if(year.length > 3 && amount.length > 0){
+  async function updateData() {
+    if (year.length > 3 && amount.length > 0) {
       setLoading(true);
       setYear(``);
       setAmount(``);
       const data = {
-        "yearPaid": `${JSON.stringify(tempYearPaid)}`,
-      }
+        yearPaid: `${JSON.stringify(tempYearPaid)}`,
+      };
       const res = await update($id, data);
-      if(res == `error`){
-        alert(`Something went wrong!`);
+      if (res == `error`) {
+        Toast.show({
+          type: "error",
+          text1: "Something went wrong!",
+          text2: "Try again later",
+        });
       }
       setLoading(false);
     } else {
-      alert(`Invalid Input!`);
+      Toast.show({
+        type: "error",
+        text1: "Invalid Input!",
+      });
     }
   }
 
@@ -117,55 +135,55 @@ const User = () => {
         <View style={styles.divider} />
         {user.labels[0] == `admin` ? (
           <>
-          <Text style={styles.headerText}>Admin View</Text>
-          <View style={styles.adminView}>
-            <View style={styles.adminInput}>
-              <TextInput
-                style={styles.inputStyle}
-                placeholder="Year"
-                keyboardType="number-pad"
-                onChangeText={setYear}
-                value={year}
-              />
-              <TextInput
-                style={styles.inputStyle}
-                placeholder="Amount"
-                keyboardType="number-pad"
-                onChangeText={setAmount}
-                value={amount}
-              />
-            </View>
-            <Button
-              // icon="update"
-              mode="contained"
-              loading={loading}
-              style={styles.updateContributionButton}
-              onPress={() => {
-                tempYearPaid.push(tempObj);
-                updateData();
-              }}
-            >
-            { loading ? `Loading` : `Update Contribution`}
-            </Button>
-            <View style={styles.adminButtons}>
+            <Text style={styles.headerText}>Admin View</Text>
+            <View style={styles.adminView}>
+              <View style={styles.adminInput}>
+                <TextInput
+                  style={styles.inputStyle}
+                  placeholder="Year"
+                  keyboardType="number-pad"
+                  onChangeText={setYear}
+                  value={year}
+                />
+                <TextInput
+                  style={styles.inputStyle}
+                  placeholder="Amount"
+                  keyboardType="number-pad"
+                  onChangeText={setAmount}
+                  value={amount}
+                />
+              </View>
               <Button
-                icon="pencil"
+                // icon="update"
                 mode="contained"
-                style={styles.editDetailsButton}
-                onPress={() => console.log("Pressed")}
+                loading={loading}
+                style={styles.updateContributionButton}
+                onPress={() => {
+                  tempYearPaid.push(tempObj);
+                  updateData();
+                }}
               >
-                Edit Details
+                {loading ? `Loading` : `Update Contribution`}
               </Button>
-              <IconButton
-                icon="trash-can"
-                iconColor="white"
-                containerColor="#E43F6F"
-                mode="contained"
-                size={20}
-                onPress={deleteData}
-              />
+              <View style={styles.adminButtons}>
+                <Button
+                  icon="pencil"
+                  mode="contained"
+                  style={styles.editDetailsButton}
+                  onPress={() => console.log("Pressed")}
+                >
+                  Edit Details
+                </Button>
+                <IconButton
+                  icon="trash-can"
+                  iconColor="white"
+                  containerColor="#E43F6F"
+                  mode="contained"
+                  size={20}
+                  onPress={deleteData}
+                />
+              </View>
             </View>
-          </View>
           </>
         ) : null}
         <View style={styles.safeArea} />
@@ -203,7 +221,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#C2BBF0",
     padding: 15,
     height: 220,
-    justifyContent: 'space-evenly'
+    justifyContent: "space-evenly",
   },
   adminInput: {
     width: "100%",
@@ -223,18 +241,18 @@ const styles = StyleSheet.create({
     height: 40,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: 'center',
+    alignItems: "center",
     // backgroundColor: 'green'
   },
   updateContributionButton: {
-    width: '100%',
+    width: "100%",
     height: 40,
   },
   editDetailsButton: {
-    width: '87%',
+    width: "87%",
     height: 40,
-    backgroundColor: '#5E4955'
-  }
+    backgroundColor: "#5E4955",
+  },
 });
 
 export default User;

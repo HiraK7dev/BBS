@@ -17,17 +17,23 @@ export async function list(){
     }
 }
 
-export async function create(name, location, yearPaid){
-    const promise = database.createDocument(
-        `${VITE_DATABASE_ID}`,
-        `${VITE_COLLECTION_ID}`,
-        ID.unique(),
-        {"name": `${name}`,
-        "accountStatus": true,
-        "location": `${location}`,
-        "yearPaid": `${yearPaid}`,
-        }
-    );
+export async function create(name, location, yearPaid, familyDetails){
+    try {
+        const promise = database.createDocument(
+            `${VITE_DATABASE_ID}`,
+            `${VITE_COLLECTION_ID}`,
+            ID.unique(),
+            {"name": `${name}`,
+            "accountStatus": true,
+            "location": `${location}`,
+            "yearPaid": `${yearPaid}`,
+            "familyDetails": `${familyDetails}`,
+            }
+        );
+        return promise;
+    } catch (error) {
+        return `error`;
+    }
 }
 
 export async function update(documentId, data){
