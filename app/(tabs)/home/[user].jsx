@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { router, Stack, useLocalSearchParams } from "expo-router";
-import { Button, DataTable, Icon, IconButton } from "react-native-paper";
+import { Button, DataTable, Divider, Icon, IconButton } from "react-native-paper";
 import { datacontext } from "../../../context/DataContext";
 import CustomHeader from "../../../components/CustomHeader";
 import { userContextData } from "../../../context/UserContext";
@@ -104,11 +104,11 @@ const User = () => {
             {/* Body */}
             <DataTable.Row>
               <DataTable.Cell>Male</DataTable.Cell>
-              <DataTable.Cell numeric>3</DataTable.Cell>
+              <DataTable.Cell numeric>{tempFamilyDetails?.male}</DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>Female</DataTable.Cell>
-              <DataTable.Cell numeric>1</DataTable.Cell>
+              <DataTable.Cell numeric>{tempFamilyDetails?.female}</DataTable.Cell>
             </DataTable.Row>
           </DataTable>
         </View>
@@ -183,6 +183,23 @@ const User = () => {
                   onPress={deleteData}
                 />
               </View>
+              {/* <Divider bold='true' style={styles.lineDivider}/>
+              <View style={styles.adminInput}>
+                <TextInput
+                  style={styles.inputStyle}
+                  placeholder="Year"
+                  keyboardType="number-pad"
+                  onChangeText={setYear}
+                  value={year}
+                />
+                <TextInput
+                  style={styles.inputStyle}
+                  placeholder="Amount"
+                  keyboardType="number-pad"
+                  onChangeText={setAmount}
+                  value={amount}
+                />
+              </View> */}
             </View>
           </>
         ) : null}
@@ -198,6 +215,11 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: 20,
+  },
+  lineDivider: {
+    backgroundColor: '#995D81',
+    marginTop: 15,
+    marginBottom: 15,
   },
   safeArea: {
     height: 40,
@@ -220,6 +242,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "#C2BBF0",
     padding: 15,
+    // height: 340,
     height: 220,
     justifyContent: "space-evenly",
   },

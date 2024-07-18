@@ -31,10 +31,13 @@ const Add = () => {
   const [location, setLocation] = useState(``);
 
   const [finalSubscription, setFinalSubscription] = useState([]);
+  const [familyDetails, setFamilyDetails] = useState({
+    male: 0,
+    female: 0,
+  });
 
   //Logic
   let tempSubscription = ``;
-  let familyDetails = ``;
 
   useEffect(() => {
     tempSubscription = {
@@ -45,10 +48,10 @@ const Add = () => {
   }, [year, amount]);
 
   useEffect(() => {
-    familyDetails = {
-      male: `${male}`,
-      female: `${female}`,
-    };
+    setFamilyDetails({
+      male: `${male == `` ? 0 : male}`,
+      female: `${female == `` ? 0 : female}`,
+    });
   }, [male, female]);
 
   function finalizeSubscription() {
@@ -104,6 +107,10 @@ const Add = () => {
         setYear(``);
         setAmount(``);
         setFinalSubscription([]);
+        setFamilyDetails({
+          male: 0,
+          female: 0,
+        });
       }
     } else {
       // alert(`Invalid Input!`);
@@ -192,7 +199,7 @@ const Add = () => {
         <View style={styles.container}>
           {finalSubscription.map((item) => {
             return (
-              <View style={styles.cardContainer}>
+              <View style={styles.cardContainer} key={item.id}>
                 <View style={styles.cardSubContainer}>
                   <Text style={styles.cardText}>{item.y}</Text>
                 </View>
@@ -201,7 +208,6 @@ const Add = () => {
                 </View>
                 <TouchableOpacity
                   style={styles.cancelButton}
-                  key={item.id}
                   onPress={() => {
                     cancelSubscription(item.id);
                   }}
