@@ -12,12 +12,27 @@ import { datacontext } from "../../../context/DataContext";
 import { router } from "expo-router";
 import client from "../../../appwrite/config";
 import { VITE_COLLECTION_ID, VITE_DATABASE_ID } from '@env';
+import { checkVersion } from "../../../appwrite/app_updates";
+import Toast from "react-native-toast-message";
 
 //Home Page
 
 const Home = () => {
-  const {data, setData} = useContext(datacontext);
+  const {data, setData, currentVersion, setLatestVersion} = useContext(datacontext);
   const [isLoading, setisLoading] = useState(0);
+
+  async function checkUpdate() {
+    const ver = await checkVersion();
+    setLatestVersion(ver.documents[0].version);
+    // console.log(ver.documents[0].version); //Viewing Data
+    if(currentVersion != ver.documents[0].version){
+      Toast.show({
+        type: "success",
+        text1: "New Update Available!",
+        text2: `Version ${ver.documents[0].version} is here exciting improvements, and bug fixes!`,
+      });
+    }
+  }
 
   async function fetchingData() {
     setisLoading(1);
@@ -35,9 +50,8 @@ const Home = () => {
 
   useEffect(() => {
     fetchingData();
+    checkUpdate();
     client.subscribe(`databases.${VITE_DATABASE_ID}.collections.${VITE_COLLECTION_ID}.documents`, response => {
-      // Callback will be executed on changes for documents A and all files.
-      // console.log(response); //Viewing Data
       if(response.events.includes("databases.*.collections.*.documents.*.create") || response.events.includes("databases.*.collections.*.documents.*.read") || response.events.includes("databases.*.collections.*.documents.*.update") || response.events.includes("databases.*.collections.*.documents.*.delete")){
         fetchingDataWithoutReload();
       }

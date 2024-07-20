@@ -22,9 +22,9 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="profile/index"
+        name="profile"
         options={{
-          title: 'Profile',
+          headerShown: false,
           tabBarIcon: ({ color }) => <Icon source='account' size={28} color={color} />,
         }}
       />
