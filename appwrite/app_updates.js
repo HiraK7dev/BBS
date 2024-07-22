@@ -9,6 +9,6 @@ export async function checkVersion(){
         );
         return promise; 
     } catch (error) {
-        return error;
+        return `error`;
     }
 }

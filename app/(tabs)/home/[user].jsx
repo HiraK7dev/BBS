@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { router, Stack, useLocalSearchParams } from "expo-router";
 import { Button, DataTable, Divider, Icon, IconButton } from "react-native-paper";
@@ -8,13 +8,14 @@ import { userContextData } from "../../../context/UserContext";
 import { ID } from "react-native-appwrite";
 import { deleteDocument, update } from "../../../appwrite/database";
 import Toast from "react-native-toast-message";
+import { updateTotal } from "../../../appwrite/total_collection";
 
 const User = () => {
   const userId = useLocalSearchParams();
 
   const { user } = useContext(userContextData);
 
-  const { data } = useContext(datacontext);
+  const { data, totCollection } = useContext(datacontext);
   const { name, location, yearPaid, familyDetails, $id } =
     data?.documents[userId.user];
 
@@ -31,6 +32,8 @@ const User = () => {
   //adminView
   const [year, setYear] = useState(``);
   const [amount, setAmount] = useState(``);
+
+  const [total, setTotal] = useState(``);
 
   const [loading, setLoading] = useState(false);
 
@@ -80,6 +83,33 @@ const User = () => {
         text1: "Invalid Input!",
       });
     }
+  }
+
+  async function submitTotal() {
+    if(total != ``){
+      const finalData = parseInt(total) + totCollection.documents[0].total;
+      const res = await updateTotal(totCollection.documents[0].$id, {
+        total: finalData
+      });
+      if (res == `error`) {
+        Toast.show({
+          type: "error",
+          text1: "Something went wrong!",
+          text2: "Try again later",
+        });
+      } else {
+        Toast.show({
+          type: "success",
+          text1: "Total updated successfully"
+        })
+      }
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Invalid Input!",
+      });
+    }
+    setTotal(``);
   }
 
   return (
@@ -167,39 +197,36 @@ const User = () => {
               </Button>
               <View style={styles.adminButtons}>
                 <Button
-                  icon="pencil"
+                  icon="account-cancel"
                   mode="contained"
                   style={styles.editDetailsButton}
                   onPress={() => { }}
                 >
-                  Edit Details
+                  Suspend Member
                 </Button>
                 <IconButton
                   icon="trash-can"
                   iconColor="white"
-                  containerColor="#E43F6F"
+                  containerColor="#A64253"
                   mode="contained"
                   size={20}
                   onPress={deleteData}
                 />
               </View>
-              {/* <Divider bold='true' style={styles.lineDivider}/>
+              {/* Total Collection */}
+              <Divider bold='true' style={styles.lineDivider}/>
               <View style={styles.adminInput}>
                 <TextInput
                   style={styles.inputStyle}
-                  placeholder="Year"
+                  placeholder="Total"
                   keyboardType="number-pad"
-                  onChangeText={setYear}
-                  value={year}
+                  onChangeText={setTotal}
+                  value={total}
                 />
-                <TextInput
-                  style={styles.inputStyle}
-                  placeholder="Amount"
-                  keyboardType="number-pad"
-                  onChangeText={setAmount}
-                  value={amount}
-                />
-              </View> */}
+                <TouchableOpacity style={styles.totalButton} onPress={submitTotal}>
+                  <Text style={styles.totalText}>Submit</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </>
         ) : null}
@@ -242,8 +269,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "#C2BBF0",
     padding: 15,
-    // height: 340,
-    height: 220,
+    height: 340,
+    // height: 220,
     justifyContent: "space-evenly",
   },
   adminInput: {
@@ -270,12 +297,25 @@ const styles = StyleSheet.create({
   updateContributionButton: {
     width: "100%",
     height: 40,
+    backgroundColor: "#6F2DBD"
   },
   editDetailsButton: {
     width: "87%",
     height: 40,
-    backgroundColor: "#5E4955",
+    backgroundColor: "#A64253",
   },
+  totalButton: {
+    backgroundColor: '#6F2DBD',
+    width: '48%',
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  totalText: {
+    color: 'white',
+    fontWeight: '600',
+    letterSpacing: 1
+  }
 });
 
 export default User;

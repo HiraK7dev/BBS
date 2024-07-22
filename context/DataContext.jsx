@@ -6,9 +6,10 @@ function DataContext({ children }) {
     const [data, setData] = useState(null);
     const [latestVersion, setLatestVersion] = useState(null);
     const [downloadUrl, setDownloadUrl] = useState(null);
+    const [totCollection, setTotCollection] = useState(null);
     const currentVersion = `0.0.1`;
   return (
-    <datacontext.Provider value={{data, setData, currentVersion, latestVersion, setLatestVersion, downloadUrl, setDownloadUrl}}>
+    <datacontext.Provider value={{data, setData, currentVersion, latestVersion, setLatestVersion, downloadUrl, setDownloadUrl, totCollection, setTotCollection}}>
         {
             children
         }

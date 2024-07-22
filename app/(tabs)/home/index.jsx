@@ -11,14 +11,15 @@ import Search from "../../../components/Search";
 import { datacontext } from "../../../context/DataContext"; 
 import { router } from "expo-router";
 import client from "../../../appwrite/config";
-import { VITE_COLLECTION_ID, VITE_DATABASE_ID } from '@env';
+import { VITE_COLLECTION_ID, VITE_DATABASE_ID, VITE_TOTAL_ID } from '@env';
 import { checkVersion } from "../../../appwrite/app_updates";
 import Toast from "react-native-toast-message";
+import { checkTotal } from "../../../appwrite/total_collection";
 
 //Home Page
 
 const Home = () => {
-  const {data, setData, currentVersion, setLatestVersion, setDownloadUrl} = useContext(datacontext);
+  const {data, setData, currentVersion, setLatestVersion, setDownloadUrl, setTotCollection} = useContext(datacontext);
   const [isLoading, setisLoading] = useState(0);
 
   async function checkUpdate() {
@@ -33,6 +34,12 @@ const Home = () => {
         text2: `Version ${ver.documents[0].version} is here exciting improvements, and bug fixes!`,
       });
     }
+  }
+
+  async function fetchingTotalCollection() {
+    const tot = await checkTotal();
+    // console.log(tot); //Viewing Data
+    setTotCollection(tot);
   }
 
   async function fetchingData() {
@@ -52,10 +59,17 @@ const Home = () => {
   useEffect(() => {
     fetchingData();
     checkUpdate();
+    fetchingTotalCollection();
     client.subscribe(`databases.${VITE_DATABASE_ID}.collections.${VITE_COLLECTION_ID}.documents`, response => {
       if(response.events.includes("databases.*.collections.*.documents.*.create") || response.events.includes("databases.*.collections.*.documents.*.read") || response.events.includes("databases.*.collections.*.documents.*.update") || response.events.includes("databases.*.collections.*.documents.*.delete")){
         fetchingDataWithoutReload();
       }
+  });
+  //Total Collection
+    client.subscribe(`databases.${VITE_DATABASE_ID}.collections.${VITE_TOTAL_ID}.documents`, response => {
+      if(response.events.includes("databases.*.collections.*.documents.*.create") || response.events.includes("databases.*.collections.*.documents.*.read") || response.events.includes("databases.*.collections.*.documents.*.update") || response.events.includes("databases.*.collections.*.documents.*.delete")){
+      fetchingTotalCollection();
+    }
   });
   }, []);
 

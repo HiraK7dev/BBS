@@ -38,8 +38,10 @@ const More = () => {
       />
       <GradientButton
         color={["#f6d365", "#fda085"]}
-        text="MEMBERS"
-        fun={() => {}}
+        text="TOTAL COLLECTION"
+        fun={() => {
+          router.push(`more/TotalCollection`);
+        }}
       />
       <GradientButton
         color={["#4facfe", "#00f2fe"]}
