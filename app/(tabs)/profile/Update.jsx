@@ -1,11 +1,11 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Linking } from "react-native";
 import { datacontext } from "../../../context/DataContext";
 import React, { useContext, useEffect, useState } from "react";
 import { checkVersion } from "../../../appwrite/app_updates";
 import { Button } from "react-native-paper";
 
 const Update = () => {
-  const { currentVersion, latestVersion } = useContext(datacontext);
+  const { currentVersion, latestVersion, downloadUrl } = useContext(datacontext);
 
   return (
     <View style={styles.container}>
@@ -22,7 +22,13 @@ const Update = () => {
               exciting improvements, and bug fixes. Update now to enjoy the
               latest enhancements!
             </Text>
-            <Button style={styles.updateButton} mode="contained">
+            <Button
+              style={styles.updateButton}
+              mode="contained"
+              onPress={() => {
+                Linking.openURL(downloadUrl);
+              }}
+            >
               <Text style={styles.buttonText}>Download</Text>
             </Button>
           </View>

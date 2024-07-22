@@ -18,12 +18,13 @@ import Toast from "react-native-toast-message";
 //Home Page
 
 const Home = () => {
-  const {data, setData, currentVersion, setLatestVersion} = useContext(datacontext);
+  const {data, setData, currentVersion, setLatestVersion, setDownloadUrl} = useContext(datacontext);
   const [isLoading, setisLoading] = useState(0);
 
   async function checkUpdate() {
     const ver = await checkVersion();
     setLatestVersion(ver.documents[0].version);
+    setDownloadUrl(ver.documents[0].downloadUrl);
     // console.log(ver.documents[0].version); //Viewing Data
     if(currentVersion != ver.documents[0].version){
       Toast.show({
