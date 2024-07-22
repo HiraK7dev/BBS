@@ -4,6 +4,9 @@ export default function Layout() {
 
   return (
     <Stack initialRouteName='index'>
+        <Stack.Screen name='edit' options={{
+            headerShown: false
+        }}/>
         <Stack.Screen name='Add' options={{
             headerTitle: 'Add Member'
         }}/>

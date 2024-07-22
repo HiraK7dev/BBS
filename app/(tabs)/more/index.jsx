@@ -25,8 +25,16 @@ const More = () => {
       />
       <GradientButton
         color={["#f093fb", "#f68084"]}
-        text="DONATIONS"
-        fun={() => {}}
+        text="EDIT MEMBER DETAILS"
+        fun={() => {
+          user?.labels[0] == `admin`
+            ? router.push(`more/edit`)
+            : Toast.show({
+                type: "error",
+                text1: "Access Denied: Admins Only",
+                text2: "You do not have the admin privileges to access this page",
+              });
+        }}
       />
       <GradientButton
         color={["#f6d365", "#fda085"]}

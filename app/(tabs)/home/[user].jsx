@@ -170,7 +170,7 @@ const User = () => {
                   icon="pencil"
                   mode="contained"
                   style={styles.editDetailsButton}
-                  onPress={() => console.log("Pressed")}
+                  onPress={() => { }}
                 >
                   Edit Details
                 </Button>
