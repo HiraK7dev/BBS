@@ -17,7 +17,7 @@ const User = () => {
 
   const { data, totCollection } = useContext(datacontext);
   const { name, location, yearPaid, familyDetails, $id } =
-    data?.documents[userId.user];
+    data[userId.user];
 
   let tempYearPaid = [];
   let tempFamilyDetails = {};

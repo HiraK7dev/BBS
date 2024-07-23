@@ -19,7 +19,7 @@ import { checkTotal } from "../../../appwrite/total_collection";
 //Home Page
 
 const Home = () => {
-  const {data, setData, currentVersion, setLatestVersion, setDownloadUrl, setTotCollection} = useContext(datacontext);
+  const {data, setData, currentVersion, setLatestVersion, setDownloadUrl, setTotCollection, setFamilyDetails} = useContext(datacontext);
   const [isLoading, setisLoading] = useState(0);
 
   async function checkUpdate() {
@@ -45,14 +45,25 @@ const Home = () => {
   async function fetchingData() {
     setisLoading(1);
     let tempData = await list();
-    setData(tempData);
-    // console.log(tempData); //Viewing the data
+    setData(tempData.documents);
+    setFamilyDetails(tempData.documents.map((val) => {
+      return JSON.parse(val.familyDetails);
+    }));
     setisLoading(0);
   }
 
-  async function fetchingDataWithoutReload() {
+  async function fetchingDataWithoutReload(id) {
     let tempData = await list();
-    setData(tempData);
+    let newData = tempData.documents.filter((val) => {
+      return val.$id == id
+    });
+    setData(data => data?.map((val) => {
+      if(val.$id == id){
+        return newData[0];
+      } else {
+        return val;
+      }
+    }));
     // console.log(tempData); //Viewing the data
   }
 
@@ -61,8 +72,10 @@ const Home = () => {
     checkUpdate();
     fetchingTotalCollection();
     client.subscribe(`databases.${VITE_DATABASE_ID}.collections.${VITE_COLLECTION_ID}.documents`, response => {
-      if(response.events.includes("databases.*.collections.*.documents.*.create") || response.events.includes("databases.*.collections.*.documents.*.read") || response.events.includes("databases.*.collections.*.documents.*.update") || response.events.includes("databases.*.collections.*.documents.*.delete")){
-        fetchingDataWithoutReload();
+      if(response.events.includes("databases.*.collections.*.documents.*.read") || response.events.includes("databases.*.collections.*.documents.*.update")){
+        fetchingDataWithoutReload(response.payload.$id);
+      } else {
+        fetchingData();
       }
   });
   //Total Collection
@@ -85,7 +98,7 @@ const Home = () => {
     <View style={styles.container}>
       <Search />
       <FlatList
-        data={data?.documents}
+        data={data}
         renderItem={({ item, index }) => (
           <TouchableOpacity onPress={() => router.push(`/home/${index}`)}>
             <Card.Title

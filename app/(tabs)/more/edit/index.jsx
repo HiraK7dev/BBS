@@ -12,7 +12,7 @@ const index = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={data?.documents}
+        data={data}
         renderItem={({ item, index }) => (
           <TouchableOpacity onPress={() => router.push(`/more/edit/${index}`)}>
             <Card.Title

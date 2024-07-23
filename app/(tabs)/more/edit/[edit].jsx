@@ -26,7 +26,7 @@ const Add = () => {
   const { data } = useContext(datacontext);
 
   const { name, location, yearPaid, familyDetails, $id } =
-    data?.documents[userId.edit];
+    data[userId.edit];
 
   //variables
   const [year, setYear] = useState(``);

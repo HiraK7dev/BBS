@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
         height: 100,
         width: '48%',
         borderRadius: 15,
-        marginBottom: 12
+        marginBottom: 12,
+        padding: 15
       },
       touchable: {
         width: '100%',
@@ -31,9 +32,9 @@ const styles = StyleSheet.create({
       buttonText: {
         color: 'white',
         fontWeight: '600',
-        fontSize: 15,
+        fontSize: 14,
         textAlign: 'center',
-        letterSpacing: 1
+        letterSpacing: 1,
       }
 })
 

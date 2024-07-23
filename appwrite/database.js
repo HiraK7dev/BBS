@@ -62,3 +62,18 @@ export async function deleteDocument(documentId){
         return `error`;
     }
 }
+
+export async function SearchDocument(value){
+    try {
+        let promise = await database.listDocuments(
+            `${VITE_DATABASE_ID}`,
+            `${VITE_COLLECTION_ID}`,
+            [
+                Query.search("name", `${value}`)
+            ]
+        );
+        return promise; 
+    } catch (error) {
+        return error;
+    }
+}
