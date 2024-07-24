@@ -52,8 +52,10 @@ const More = () => {
       />
       <GradientButton
         color={["#38f9d7", "#43e97b"]}
-        text="HISTORY"
-        fun={() => {}}
+        text="SUSPENDED MEMBERS"
+        fun={() => {
+          router.push(`more/SuspendedMembers`);
+        }}
       />
     </View>
   );

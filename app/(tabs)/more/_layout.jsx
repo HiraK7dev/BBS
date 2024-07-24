@@ -10,6 +10,9 @@ export default function Layout() {
         <Stack.Screen name='PopulationOverview' options={{
             headerTitle: 'Population Overview'
         }}/>
+        <Stack.Screen name='SuspendedMembers' options={{
+            headerTitle: 'Suspended Members'
+        }}/>
         <Stack.Screen name='TotalCollection' options={{
             headerTitle: 'Total Collection'
         }}/>

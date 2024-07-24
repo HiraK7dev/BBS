@@ -1,4 +1,10 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { list } from "../../../appwrite/database";
 import {
@@ -6,12 +12,13 @@ import {
   Card,
   Avatar,
   IconButton,
+  Icon,
 } from "react-native-paper";
 import Search from "../../../components/Search";
-import { datacontext } from "../../../context/DataContext"; 
+import { datacontext } from "../../../context/DataContext";
 import { router } from "expo-router";
 import client from "../../../appwrite/config";
-import { VITE_COLLECTION_ID, VITE_DATABASE_ID, VITE_TOTAL_ID } from '@env';
+import { VITE_COLLECTION_ID, VITE_DATABASE_ID, VITE_TOTAL_ID } from "@env";
 import { checkVersion } from "../../../appwrite/app_updates";
 import Toast from "react-native-toast-message";
 import { checkTotal } from "../../../appwrite/total_collection";
@@ -19,7 +26,15 @@ import { checkTotal } from "../../../appwrite/total_collection";
 //Home Page
 
 const Home = () => {
-  const {data, setData, currentVersion, setLatestVersion, setDownloadUrl, setTotCollection, setFamilyDetails} = useContext(datacontext);
+  const {
+    data,
+    setData,
+    currentVersion,
+    setLatestVersion,
+    setDownloadUrl,
+    setTotCollection,
+    setFamilyDetails,
+  } = useContext(datacontext);
   const [isLoading, setisLoading] = useState(0);
 
   async function checkUpdate() {
@@ -27,7 +42,7 @@ const Home = () => {
     setLatestVersion(ver.documents[0].version);
     setDownloadUrl(ver.documents[0].downloadUrl);
     // console.log(ver.documents[0].version); //Viewing Data
-    if(currentVersion != ver.documents[0].version){
+    if (currentVersion != ver.documents[0].version) {
       Toast.show({
         type: "success",
         text1: "New Update Available!",
@@ -46,24 +61,28 @@ const Home = () => {
     setisLoading(1);
     let tempData = await list();
     setData(tempData.documents);
-    setFamilyDetails(tempData.documents.map((val) => {
-      return JSON.parse(val.familyDetails);
-    }));
+    setFamilyDetails(
+      tempData.documents.map((val) => {
+        return JSON.parse(val.familyDetails);
+      })
+    );
     setisLoading(0);
   }
 
   async function fetchingDataWithoutReload(id) {
     let tempData = await list();
     let newData = tempData.documents.filter((val) => {
-      return val.$id == id
+      return val.$id == id;
     });
-    setData(data => data?.map((val) => {
-      if(val.$id == id){
-        return newData[0];
-      } else {
-        return val;
-      }
-    }));
+    setData((data) =>
+      data?.map((val) => {
+        if (val.$id == id) {
+          return newData[0];
+        } else {
+          return val;
+        }
+      })
+    );
     // console.log(tempData); //Viewing the data
   }
 
@@ -71,19 +90,45 @@ const Home = () => {
     fetchingData();
     checkUpdate();
     fetchingTotalCollection();
-    client.subscribe(`databases.${VITE_DATABASE_ID}.collections.${VITE_COLLECTION_ID}.documents`, response => {
-      if(response.events.includes("databases.*.collections.*.documents.*.read") || response.events.includes("databases.*.collections.*.documents.*.update")){
-        fetchingDataWithoutReload(response.payload.$id);
-      } else {
-        fetchingData();
+    client.subscribe(
+      `databases.${VITE_DATABASE_ID}.collections.${VITE_COLLECTION_ID}.documents`,
+      (response) => {
+        if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.read"
+          ) ||
+          response.events.includes(
+            "databases.*.collections.*.documents.*.update"
+          )
+        ) {
+          fetchingDataWithoutReload(response.payload.$id);
+        } else {
+          fetchingData();
+        }
       }
-  });
-  //Total Collection
-    client.subscribe(`databases.${VITE_DATABASE_ID}.collections.${VITE_TOTAL_ID}.documents`, response => {
-      if(response.events.includes("databases.*.collections.*.documents.*.create") || response.events.includes("databases.*.collections.*.documents.*.read") || response.events.includes("databases.*.collections.*.documents.*.update") || response.events.includes("databases.*.collections.*.documents.*.delete")){
-      fetchingTotalCollection();
-    }
-  });
+    );
+    //Total Collection
+    client.subscribe(
+      `databases.${VITE_DATABASE_ID}.collections.${VITE_TOTAL_ID}.documents`,
+      (response) => {
+        if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.create"
+          ) ||
+          response.events.includes(
+            "databases.*.collections.*.documents.*.read"
+          ) ||
+          response.events.includes(
+            "databases.*.collections.*.documents.*.update"
+          ) ||
+          response.events.includes(
+            "databases.*.collections.*.documents.*.delete"
+          )
+        ) {
+          fetchingTotalCollection();
+        }
+      }
+    );
   }, []);
 
   if (isLoading) {
@@ -114,8 +159,22 @@ const Home = () => {
                   style={styles.cardIcon}
                 />
               )}
+              right={(props) =>
+                item.accountStatus == false ? 
+                <IconButton
+                  {...props}
+                  icon="alert-circle-outline"
+                  iconColor="#FF2C55"
+                  onPress={() => {
+                    Toast.show({
+                      type: 'error',
+                      text1: 'Member Suspended',
+                    });
+                  }}
+                /> : null
+              }
             />
-            </TouchableOpacity>
+          </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id}
       />

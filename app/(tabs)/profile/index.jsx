@@ -35,7 +35,7 @@ const Profile = () => {
               <IconButton
                 {...props}
                 icon="arrow-right"
-                onPress={() => {}}
+                onPress={() => { router.push(`profile/About`) }}
               />
             )}
           />

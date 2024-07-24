@@ -16,7 +16,7 @@ const User = () => {
   const { user } = useContext(userContextData);
 
   const { data, totCollection } = useContext(datacontext);
-  const { name, location, yearPaid, familyDetails, $id } =
+  const { name, location, accountStatus, yearPaid, familyDetails, $id } =
     data[userId.user];
 
   let tempYearPaid = [];
@@ -83,6 +83,25 @@ const User = () => {
         text1: "Invalid Input!",
       });
     }
+  }
+
+  async function suspendMember() {
+      const data = {
+        accountStatus: accountStatus ? false : true,
+      };
+      const res = await update($id, data);
+      if (res == `error`) {
+        Toast.show({
+          type: "error",
+          text1: "Something went wrong!",
+          text2: "Try again later",
+        });
+      } else {
+        Toast.show({
+          type: "success",
+          text1: "Suspended Successfully",
+        });
+      }
   }
 
   async function submitTotal() {
@@ -200,9 +219,9 @@ const User = () => {
                   icon="account-cancel"
                   mode="contained"
                   style={styles.editDetailsButton}
-                  onPress={() => { }}
+                  onPress={suspendMember}
                 >
-                  Suspend Member
+                  {accountStatus ? `Suspend Member` : `Restore Member`}
                 </Button>
                 <IconButton
                   icon="trash-can"
@@ -302,7 +321,7 @@ const styles = StyleSheet.create({
   editDetailsButton: {
     width: "87%",
     height: 40,
-    backgroundColor: "#A64253",
+    backgroundColor: `#A64253`,
   },
   totalButton: {
     backgroundColor: '#6F2DBD',
