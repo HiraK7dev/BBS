@@ -1,6 +1,7 @@
 import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { LinearGradient } from "expo-linear-gradient";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const GradientButton = ({ color, text, fun }) => {
   return (
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
       buttonText: {
         color: 'white',
         fontWeight: '600',
-        fontSize: 14,
+        fontSize: RFPercentage(1.8),
         textAlign: 'center',
         letterSpacing: 1,
       }

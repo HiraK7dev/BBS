@@ -97,10 +97,14 @@ const User = () => {
           text2: "Try again later",
         });
       } else {
+        accountStatus ? 
         Toast.show({
           type: "success",
           text1: "Suspended Successfully",
-        });
+        }) : Toast.show({
+          type: "success",
+          text1: "Restored Successfully",
+        })
       }
   }
 

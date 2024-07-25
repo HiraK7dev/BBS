@@ -2,6 +2,8 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { datacontext } from "../../../context/DataContext";
 import { PieChart } from "react-native-gifted-charts";
+import { RFPercentage } from "react-native-responsive-fontsize";
+import { Divider } from "react-native-paper";
 
 const PopulationOverview = () => {
   const { familyDetails } = useContext(datacontext);
@@ -57,7 +59,7 @@ const PopulationOverview = () => {
                   style={{ justifyContent: "center", alignItems: "center" }}
                 >
                   <Text
-                    style={{ fontSize: 22, color: "white", fontWeight: "bold" }}
+                    style={{ fontSize: RFPercentage(3), color: "white", fontWeight: "bold" }}
                   >
                     {totMale + totFemale}
                   </Text>
@@ -91,6 +93,7 @@ const PopulationOverview = () => {
             <Text style={styles.totText}>{totFemale}</Text>
             <Text style={styles.summeryText}>FEMALES</Text>
           </View>
+          <Divider bold='true' horizontalInset='true' style={styles.lineDivider}/>
           <View style={styles.summeryLayout}>
             <Text style={styles.totText}>{totMale}</Text>
             <Text style={styles.summeryText}>MALES</Text>
@@ -110,8 +113,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '2%'
   },
+  lineDivider: {
+    backgroundColor: '#995D81',
+    height: '90%',
+    width: 1,
+    marginTop: 15,
+    marginBottom: 15,
+  },
   totText: {
-    fontSize: 60,
+    fontSize: RFPercentage(4),
     fontWeight: "500",
   },
   titleText: {
@@ -120,7 +130,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
   },
   details: {
-    height: "65%",
+    height: "70%",
     width: "86%",
     backgroundColor: "white",
     alignItems: "center",
@@ -159,12 +169,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   viewText: {
-    fontSize: 10,
+    fontSize: RFPercentage(1.4),
     fontWeight: "500",
     letterSpacing: 1.5,
   },
   percentText: {
-    fontSize: 30,
+    fontSize: RFPercentage(2.5),
     fontWeight: "700",
   },
   summery: {
@@ -173,7 +183,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     elevation: 15,
     padding: 20,
     borderRadius: 25,

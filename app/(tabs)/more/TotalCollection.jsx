@@ -5,6 +5,7 @@ import { userContextData } from "../../../context/UserContext";
 import { Button } from "react-native-paper";
 import { updateTotal } from "../../../appwrite/total_collection";
 import Toast from "react-native-toast-message";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const TotalCollection = () => {
   const { totCollection } = useContext(datacontext);
@@ -63,11 +64,11 @@ const styles = StyleSheet.create({
     borderRadius: 25
   },
   collectionText: {
-    fontSize: 80,
+    fontSize: RFPercentage(5.5),
     fontWeight: "500",
   },
   subText: {
-    fontSize: 10,
+    fontSize: RFPercentage(1.2),
     marginBottom: 25
   },
 });
