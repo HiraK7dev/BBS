@@ -6,7 +6,8 @@ import { Button } from "react-native-paper";
 import { RFPercentage } from "react-native-responsive-fontsize";
 
 const Update = () => {
-  const { currentVersion, latestVersion, downloadUrl } = useContext(datacontext);
+  const { currentVersion, latestVersion, downloadUrl } =
+    useContext(datacontext);
 
   return (
     <View style={styles.container}>
@@ -73,13 +74,13 @@ const styles = StyleSheet.create({
     // backgroundColor: "pink",
   },
   Image: {
-    height: '44%',
+    height: "44%",
     aspectRatio: 1,
   },
   updateHeader: {
     fontSize: RFPercentage(3),
     fontWeight: "700",
-    textAlign: 'center'
+    textAlign: "center",
   },
   updateText: {
     fontSize: RFPercentage(2),

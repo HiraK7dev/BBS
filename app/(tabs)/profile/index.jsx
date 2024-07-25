@@ -14,18 +14,21 @@ const Profile = () => {
       <Text style={styles.accountName}>{user?.name}</Text>
       <View style={styles.container}>
         <Card style={styles.card}>
-          <Card.Title
-            title="Email:"
-            subtitle={user?.email}
-          />
+          <Card.Title title="Email:" subtitle={user?.email} />
           <Card.Title
             title="Update:"
-            subtitle={currentVersion != latestVersion ? `Update Available!` : `Version: ${currentVersion}`}
+            subtitle={
+              currentVersion != latestVersion
+                ? `Update Available!`
+                : `Version: ${currentVersion}`
+            }
             right={(props) => (
               <IconButton
                 {...props}
                 icon="arrow-right"
-                onPress={() => { router.push(`profile/Update`) }}
+                onPress={() => {
+                  router.push(`profile/Update`);
+                }}
               />
             )}
           />
@@ -35,7 +38,9 @@ const Profile = () => {
               <IconButton
                 {...props}
                 icon="arrow-right"
-                onPress={() => { router.push(`profile/About`) }}
+                onPress={() => {
+                  router.push(`profile/About`);
+                }}
               />
             )}
           />
@@ -61,11 +66,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   card: {
-    padding: 10
+    padding: 10,
   },
   icon: {
     backgroundColor: "#93A3BC",
-    marginTop: 30
+    marginTop: 30,
   },
   accountName: {
     padding: 20,

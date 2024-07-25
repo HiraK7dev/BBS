@@ -1,7 +1,20 @@
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { router, Stack, useLocalSearchParams } from "expo-router";
-import { Button, DataTable, Divider, Icon, IconButton } from "react-native-paper";
+import {
+  Button,
+  DataTable,
+  Divider,
+  Icon,
+  IconButton,
+} from "react-native-paper";
 import { datacontext } from "../../../context/DataContext";
 import CustomHeader from "../../../components/CustomHeader";
 import { userContextData } from "../../../context/UserContext";
@@ -86,33 +99,34 @@ const User = () => {
   }
 
   async function suspendMember() {
-      const data = {
-        accountStatus: accountStatus ? false : true,
-      };
-      const res = await update($id, data);
-      if (res == `error`) {
-        Toast.show({
-          type: "error",
-          text1: "Something went wrong!",
-          text2: "Try again later",
-        });
-      } else {
-        accountStatus ? 
-        Toast.show({
-          type: "success",
-          text1: "Suspended Successfully",
-        }) : Toast.show({
-          type: "success",
-          text1: "Restored Successfully",
-        })
-      }
+    const data = {
+      accountStatus: accountStatus ? false : true,
+    };
+    const res = await update($id, data);
+    if (res == `error`) {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong!",
+        text2: "Try again later",
+      });
+    } else {
+      accountStatus
+        ? Toast.show({
+            type: "success",
+            text1: "Suspended Successfully",
+          })
+        : Toast.show({
+            type: "success",
+            text1: "Restored Successfully",
+          });
+    }
   }
 
   async function submitTotal() {
-    if(total != ``){
+    if (total != ``) {
       const finalData = parseInt(total) + totCollection.documents[0].total;
       const res = await updateTotal(totCollection.documents[0].$id, {
-        total: finalData
+        total: finalData,
       });
       if (res == `error`) {
         Toast.show({
@@ -123,8 +137,8 @@ const User = () => {
       } else {
         Toast.show({
           type: "success",
-          text1: "Total updated successfully"
-        })
+          text1: "Total updated successfully",
+        });
       }
     } else {
       Toast.show({
@@ -161,7 +175,9 @@ const User = () => {
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell>Female</DataTable.Cell>
-              <DataTable.Cell numeric>{tempFamilyDetails?.female}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {tempFamilyDetails?.female}
+              </DataTable.Cell>
             </DataTable.Row>
           </DataTable>
         </View>
@@ -237,7 +253,7 @@ const User = () => {
                 />
               </View>
               {/* Total Collection */}
-              <Divider bold='true' style={styles.lineDivider}/>
+              <Divider bold="true" style={styles.lineDivider} />
               <View style={styles.adminInput}>
                 <TextInput
                   style={styles.inputStyle}
@@ -246,7 +262,10 @@ const User = () => {
                   onChangeText={setTotal}
                   value={total}
                 />
-                <TouchableOpacity style={styles.totalButton} onPress={submitTotal}>
+                <TouchableOpacity
+                  style={styles.totalButton}
+                  onPress={submitTotal}
+                >
                   <Text style={styles.totalText}>Submit</Text>
                 </TouchableOpacity>
               </View>
@@ -267,7 +286,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   lineDivider: {
-    backgroundColor: '#995D81',
+    backgroundColor: "#995D81",
     marginTop: 15,
     marginBottom: 15,
   },
@@ -320,7 +339,7 @@ const styles = StyleSheet.create({
   updateContributionButton: {
     width: "100%",
     height: 40,
-    backgroundColor: "#6F2DBD"
+    backgroundColor: "#6F2DBD",
   },
   editDetailsButton: {
     width: "87%",
@@ -328,17 +347,17 @@ const styles = StyleSheet.create({
     backgroundColor: `#A64253`,
   },
   totalButton: {
-    backgroundColor: '#6F2DBD',
-    width: '48%',
+    backgroundColor: "#6F2DBD",
+    width: "48%",
     borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center",
   },
   totalText: {
-    color: 'white',
-    fontWeight: '600',
-    letterSpacing: 1
-  }
+    color: "white",
+    fontWeight: "600",
+    letterSpacing: 1,
+  },
 });
 
 export default User;

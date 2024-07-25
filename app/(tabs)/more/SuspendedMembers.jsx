@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   suspendedText: {
     letterSpacing: 1.5,
-    color: '#7A7D7D'
+    color: "#7A7D7D",
   },
   titleText: {
     fontWeight: "700",

@@ -12,21 +12,21 @@ const TotalCollection = () => {
   const { user } = useContext(userContextData);
 
   async function submitTotal() {
-      const res = await updateTotal(totCollection.documents[0].$id, {
-        total: 0
+    const res = await updateTotal(totCollection.documents[0].$id, {
+      total: 0,
+    });
+    if (res == `error`) {
+      Toast.show({
+        type: "error",
+        text1: "Something went wrong!",
+        text2: "Try again later",
       });
-      if (res == `error`) {
-        Toast.show({
-          type: "error",
-          text1: "Something went wrong!",
-          text2: "Try again later",
-        });
-      } else {
-        Toast.show({
-          type: "success",
-          text1: "Collection Cleared Successfully",
-        });
-      }
+    } else {
+      Toast.show({
+        type: "success",
+        text1: "Collection Cleared Successfully",
+      });
+    }
   }
 
   return (
@@ -37,10 +37,14 @@ const TotalCollection = () => {
         </Text>
         <Text style={styles.subText}>TOTAL COLLECTION(₹)</Text>
         {user?.labels[0] == `admin` ? (
-          <Button icon="notification-clear-all" mode="contained" onPress={submitTotal}>CLEAR</Button>
-        ) : (
-          null
-        )}
+          <Button
+            icon="notification-clear-all"
+            mode="contained"
+            onPress={submitTotal}
+          >
+            CLEAR
+          </Button>
+        ) : null}
       </View>
     </View>
   );
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     elevation: 15,
     padding: 20,
-    borderRadius: 25
+    borderRadius: 25,
   },
   collectionText: {
     fontSize: RFPercentage(5.5),
@@ -69,7 +73,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     fontSize: RFPercentage(1.2),
-    marginBottom: 25
+    marginBottom: 25,
   },
 });
 

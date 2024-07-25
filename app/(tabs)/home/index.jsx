@@ -22,6 +22,8 @@ import { VITE_COLLECTION_ID, VITE_DATABASE_ID, VITE_TOTAL_ID } from "@env";
 import { checkVersion } from "../../../appwrite/app_updates";
 import Toast from "react-native-toast-message";
 import { checkTotal } from "../../../appwrite/total_collection";
+import { RFPercentage } from "react-native-responsive-fontsize";
+import { Divider } from "react-native-paper";
 
 //Home Page
 
@@ -160,23 +162,34 @@ const Home = () => {
                 />
               )}
               right={(props) =>
-                item.accountStatus == false ? 
-                <IconButton
-                  {...props}
-                  icon="alert-circle-outline"
-                  iconColor="#FF2C55"
-                  onPress={() => {
-                    Toast.show({
-                      type: 'error',
-                      text1: 'Member Suspended',
-                    });
-                  }}
-                /> : null
+                item.accountStatus == false ? (
+                  <IconButton
+                    {...props}
+                    icon="alert-circle-outline"
+                    iconColor="#FF2C55"
+                    onPress={() => {
+                      Toast.show({
+                        type: "error",
+                        text1: "Member Suspended",
+                      });
+                    }}
+                  />
+                ) : null
               }
             />
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item.id}
+        ListFooterComponent={() => (
+          <>
+            <Divider />
+            <View style={styles.totalMemberView}>
+              <Text style={styles.totalMemberText}>
+                Total Members: {data.length}
+              </Text>
+            </View>
+          </>
+        )}
       />
     </View>
   );
@@ -200,6 +213,14 @@ const styles = StyleSheet.create({
   },
   cardIcon: {
     backgroundColor: "#D8D8D8",
+  },
+  totalMemberView: {
+    width: "100%",
+    alignItems: "center",
+    padding: 15,
+  },
+  totalMemberText: {
+    fontSize: RFPercentage(1.4),
   },
 });
 

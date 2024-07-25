@@ -19,7 +19,8 @@ const More = () => {
             : Toast.show({
                 type: "error",
                 text1: "Access Denied: Admins Only",
-                text2: "You do not have the admin privileges to access this page",
+                text2:
+                  "You do not have the admin privileges to access this page",
               });
         }}
       />
@@ -32,7 +33,8 @@ const More = () => {
             : Toast.show({
                 type: "error",
                 text1: "Access Denied: Admins Only",
-                text2: "You do not have the admin privileges to access this page",
+                text2:
+                  "You do not have the admin privileges to access this page",
               });
         }}
       />
