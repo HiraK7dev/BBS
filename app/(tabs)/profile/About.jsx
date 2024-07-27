@@ -32,7 +32,7 @@ const About = () => {
           <Card.Content>
             <Text style={styles.donationText}>
               এই এপটো শ্ৰী মুকুট ভট্টাচাৰ্যই পিতৃ প্ৰয়াত পদুম ভট্টাচাৰ্য আৰু
-              মাতৃ প্ৰয়াত মুক্ত ভট্টাচাৰ্যৰ নামত আগবঢ়াইছে ।
+              মাতৃ প্ৰয়াত মুক্তা ভট্টাচাৰ্যৰ নামত আগবঢ়াইছে ।
             </Text>
           </Card.Content>
         </Card>
@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
   },
   titles: {
     fontWeight: "600",
-    fontSize: RFPercentage(1.8),
+    fontSize: RFPercentage(1.7),
   },
   normText: {
-    fontSize: RFPercentage(1.8),
+    fontSize: RFPercentage(1.7),
   },
   lineDivider: {
     backgroundColor: "#995D81",
