@@ -1,12 +1,16 @@
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
+  Icon,
   Text,
   TextInput,
 } from "react-native-paper";
-import { Redirect, router } from "expo-router";
+import { Redirect, router, Stack } from "expo-router";
 import { userContextData } from "../context/UserContext";
+import * as Network from 'expo-network';
+import * as Updates from 'expo-updates';
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const Login = () => {
 
@@ -19,6 +23,8 @@ const Login = () => {
 
   const [isValid, setIsValid] = useState(true);
   const [isValidPass, setIsValidPass] = useState(true);
+
+  const [internet, setInternet] = useState(false);
 
   const validateEmail = (email) => {
     // Simple regex for email validation
@@ -33,12 +39,54 @@ const Login = () => {
 
   const handlePassChange = (text) => {
     setPass(text);
-    if(text.length < 8){
+    if (text.length < 8) {
       setIsValidPass(false);
     } else {
       setIsValidPass(true);
     }
   };
+
+  async function checkInternetConnectivity() {
+    const connection = await Network.getNetworkStateAsync();
+    setInternet(connection.isConnected);
+  }
+
+  const reloadApp = async () => {
+    try {
+      await Updates.reloadAsync();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    checkInternetConnectivity();
+  }, [])
+
+  if (!internet) {
+    return (
+      <>
+        <Stack.Screen
+          options={{
+            headerTitle: "BBS",
+            headerTitleAlign: "left",
+          }}
+        />
+        <View style={subStyles.container}>
+          <View style={subStyles.layout}>
+            <Icon
+              source="wifi-alert"
+              size={110}
+              color="red"
+            />
+            <Text style={subStyles.titleText}>Whoops!</Text>
+            <Text style={subStyles.subText}>No Internet Connection Found, Please check your Internet Settings.</Text>
+            <Button mode="elevated" onPress={reloadApp}>Reload</Button>
+          </View>
+        </View>
+      </>
+    )
+  }
 
   return user ? (
     <Redirect href="(tabs)/home" />
@@ -76,7 +124,7 @@ const Login = () => {
           mode="contained"
           icon="account"
           onPress={() => {
-            if(isValid && isValidPass && email != null && pass != null){
+            if (isValid && isValidPass && email != null && pass != null) {
               Login(email, pass);
             }
           }}
@@ -125,6 +173,33 @@ const styles = StyleSheet.create({
   },
   signUpText: {
     color: 'blue'
+  }
+});
+
+const subStyles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 25
+  },
+  layout: {
+    width: "100%",
+    height: 310,
+    justifyContent: "space-around",
+    alignItems: 'center'
+  },
+  titleText: {
+    fontSize: RFPercentage(4.5),
+    fontWeight: '800',
+    textAlign: 'center',
+    color: '#7E2E84'
+  },
+  subText: {
+    fontSize: RFPercentage(2.4),
+    textAlign: 'center',
+    color: '#736F72'
   }
 });
 

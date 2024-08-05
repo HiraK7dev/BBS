@@ -96,7 +96,7 @@ const SignUp = () => {
         </Button>
         <View style={styles.signUpView}>
           <Text>Have have an account? </Text>
-          <Text style={styles.signUpText} onPress={() => router.replace(`/`)}>Login here</Text>
+          <Text style={styles.signUpText} onPress={() => router.back()}>Login here</Text>
         </View>
       </View>
     </View>
