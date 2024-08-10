@@ -62,9 +62,10 @@ const Home = () => {
   async function fetchingData() {
     setisLoading(1);
     let tempData = await list();
-    setData(tempData.documents);
+    console.log(tempData);
+    setData(tempData);
     setFamilyDetails(
-      tempData.documents.map((val) => {
+      tempData.map((val) => {
         return JSON.parse(val.familyDetails);
       })
     );

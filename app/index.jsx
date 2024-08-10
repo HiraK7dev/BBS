@@ -91,6 +91,13 @@ const Login = () => {
   return user ? (
     <Redirect href="(tabs)/home" />
   ) : (
+    <>
+    <Stack.Screen
+          options={{
+            headerTitle: "Login",
+            headerTitleAlign: "center",
+          }}
+        />
     <View style={styles.body}>
       <View style={styles.container}>
         <TextInput
@@ -141,6 +148,7 @@ const Login = () => {
         </View>
       </View>
     </View>
+    </>
   );
 };
 

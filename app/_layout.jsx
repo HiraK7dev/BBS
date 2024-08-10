@@ -71,10 +71,6 @@ const Layout = () => {
           />
           <Stack.Screen
             name="index"
-            options={{
-              headerTitle: "Login",
-              headerTitleAlign: "center",
-            }}
           />
         </Stack>
         <Toast config={toastConfig} />
