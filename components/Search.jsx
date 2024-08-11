@@ -19,7 +19,7 @@ const Search = () => {
 
   async function cancelSearch(){
     const res = await list();
-    setData(res.documents);
+    setData(res);
   }
 
   if(isLoading){
