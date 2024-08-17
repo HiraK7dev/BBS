@@ -16,6 +16,9 @@ export default function Layout() {
         <Stack.Screen name='TotalCollection' options={{
             headerTitle: 'Total Collection'
         }}/>
+        <Stack.Screen name='OtherCollection' options={{
+            headerTitle: 'Other Collection'
+        }}/>
         <Stack.Screen name='Add' options={{
             headerTitle: 'Add Member'
         }}/>

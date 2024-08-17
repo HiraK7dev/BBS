@@ -48,7 +48,7 @@ export async function list() {
 
 export async function create(name, location, yearPaid, familyDetails){
     try {
-        const promise = database.createDocument(
+        const promise = await database.createDocument(
             `${VITE_DATABASE_ID}`,
             `${VITE_COLLECTION_ID}`,
             ID.unique(),

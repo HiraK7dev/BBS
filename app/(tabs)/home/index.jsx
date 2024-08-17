@@ -18,12 +18,13 @@ import Search from "../../../components/Search";
 import { datacontext } from "../../../context/DataContext";
 import { router } from "expo-router";
 import client from "../../../appwrite/config";
-import { VITE_COLLECTION_ID, VITE_DATABASE_ID, VITE_TOTAL_ID } from "@env";
+import { VITE_COLLECTION_ID, VITE_DATABASE_ID, VITE_TOTAL_ID, VITE_OTHERCOL_ID } from "@env";
 import { checkVersion } from "../../../appwrite/app_updates";
 import Toast from "react-native-toast-message";
 import { checkTotal } from "../../../appwrite/total_collection";
 import { RFPercentage } from "react-native-responsive-fontsize";
 import { Divider } from "react-native-paper";
+import { checkOtherCollection } from "../../../appwrite/other_collection";
 
 //Home Page
 
@@ -36,6 +37,7 @@ const Home = () => {
     setDownloadUrl,
     setTotCollection,
     setFamilyDetails,
+    setOtCollection,
   } = useContext(datacontext);
   const [isLoading, setisLoading] = useState(0);
 
@@ -59,10 +61,16 @@ const Home = () => {
     setTotCollection(tot);
   }
 
+  async function fetchingOtherCollection() {
+    const res = await checkOtherCollection();
+    // console.log(res); //Viewing Data    
+    setOtCollection(res);   
+  }
+
   async function fetchingData() {
     setisLoading(1);
     let tempData = await list();
-    console.log(tempData);
+    // console.log(tempData);
     setData(tempData);
     setFamilyDetails(
       tempData.map((val) => {
@@ -74,7 +82,7 @@ const Home = () => {
 
   async function fetchingDataWithoutReload(id) {
     let tempData = await list();
-    let newData = tempData.documents.filter((val) => {
+    let newData = tempData.filter((val) => {
       return val.$id == id;
     });
     setData((data) =>
@@ -93,6 +101,7 @@ const Home = () => {
     fetchingData();
     checkUpdate();
     fetchingTotalCollection();
+    fetchingOtherCollection();
     client.subscribe(
       `databases.${VITE_DATABASE_ID}.collections.${VITE_COLLECTION_ID}.documents`,
       (response) => {
@@ -129,6 +138,28 @@ const Home = () => {
           )
         ) {
           fetchingTotalCollection();
+        }
+      }
+    );
+    //Other Collection
+    client.subscribe(
+      `databases.${VITE_DATABASE_ID}.collections.${VITE_OTHERCOL_ID}.documents`,
+      (response) => {
+        if (
+          response.events.includes(
+            "databases.*.collections.*.documents.*.create"
+          ) ||
+          response.events.includes(
+            "databases.*.collections.*.documents.*.read"
+          ) ||
+          response.events.includes(
+            "databases.*.collections.*.documents.*.update"
+          ) ||
+          response.events.includes(
+            "databases.*.collections.*.documents.*.delete"
+          )
+        ) {
+          fetchingOtherCollection();
         }
       }
     );

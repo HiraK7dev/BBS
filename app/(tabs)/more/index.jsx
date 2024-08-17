@@ -53,6 +53,13 @@ const More = () => {
         }}
       />
       <GradientButton
+        color={["#74EBD5", "#9FACE6"]}
+        text="OTHER CONTRIBUTION"
+        fun={() => {
+          router.push(`more/OtherCollection`);
+        }}
+      />
+      <GradientButton
         color={["#38f9d7", "#43e97b"]}
         text="SUSPENDED MEMBERS"
         fun={() => {
