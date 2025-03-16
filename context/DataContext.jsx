@@ -9,7 +9,7 @@ function DataContext({ children }) {
     const [downloadUrl, setDownloadUrl] = useState(null);
     const [totCollection, setTotCollection] = useState(null);
     const [otCollection, setOtCollection] = useState(null);
-    const currentVersion = `1.1.0`;
+    const currentVersion = `1.2.0`;
   return (
     <datacontext.Provider value={{data, setData, currentVersion, latestVersion, setLatestVersion, downloadUrl, setDownloadUrl, totCollection, setTotCollection, familyDetails, setFamilyDetails, otCollection, setOtCollection}}>
         {
